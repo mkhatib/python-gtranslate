@@ -4,7 +4,7 @@ from urllib import urlencode
 import sys
 from gd import detect_lang
 
-# TODO: update twitter status with many languge!
+# TODO: update twitter status with many language!
 # The google translate API can be found here: 
 # http://code.google.com/apis/ajaxlanguage/documentation/#Examples
 
@@ -12,7 +12,7 @@ argv = sys.argv
 from_file = False
 result_file = None
 
-if len(argv) < 6:
+if len(argv) < 4:
 	print 'USAGE:\n%s language_code text'%argv[0]
 	print '%s language_code --file file_name'%argv[0]
 	sys.exit(1)
@@ -38,7 +38,8 @@ paragraphs = text.split('\n')
 lang1 = detect_lang(paragraphs[0][:600]) #sys.argv[2]
 
 for lang in to_langs:
-	print "Translation in %s\n"%lang
+	print "Translation in %s is "%lang,
+	if from_file: print '\n',
 	langpair = '%s|%s'%(lang1,lang)
 	base_url = 'http://ajax.googleapis.com/ajax/services/language/translate?'
 
@@ -60,7 +61,7 @@ for lang in to_langs:
 		end_idx = _translation.find('"}, "')
 		translation += _translation[:end_idx] + '\n'
 		if cut: newline = ''
-		else: newline = '\n\n'
+		else: newline = '\n'
 
 		print _translation[:end_idx].replace('\u0026quot;', '"'), newline,
 	print '\n',
