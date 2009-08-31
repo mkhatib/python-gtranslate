@@ -2,16 +2,18 @@
 from urllib2 import urlopen
 from urllib import urlencode
 import sys
+import simplejson as json
 
 def detect_lang(text):
-  base_url="http://www.google.com/uds/GlangDetect?callback=google.language.callbacks.id100&"
+  base_url="http://www.google.com/uds/GlangDetect?"
   params=urlencode( (('v',2.0),('q',text)))
   url=base_url+params
   content=urlopen(url).read()
-  start_idx=content.find('"language":"')+12
-  language=content[start_idx:]
-  end_idx=language.find('","')
-  language=language[:end_idx]
+  response = json.loads(content)
+  if response['responseStatus'] == 200:
+    return response['responseData']['language']
+  else:
+    return None
   return language  
 
 if __name__ == "__main__":
